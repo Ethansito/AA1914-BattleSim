@@ -1,5 +1,7 @@
 package org.ethansito;
 
+import org.ethansito.Frames.Menu;
+
 import java.util.Random;
 
 public class Main {
