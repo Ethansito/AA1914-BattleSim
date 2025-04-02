@@ -120,4 +120,8 @@ public class Menu extends JFrame implements ActionListener, MouseListener {
     public void mouseExited(MouseEvent e) {
 
     }
+
+    public static void addUnit(){
+
+    }
 }
