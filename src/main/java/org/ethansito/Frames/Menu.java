@@ -11,6 +11,9 @@ public class Menu extends JFrame implements ActionListener, MouseListener {
 
     JButton addUnitButton = new JButton();
     JButton battleButton = new JButton();
+    JCheckBox landBattleBox;
+    JCheckBox seaBattleBox;
+    JCheckBox ampBattleBox;
 
     public Menu()
     {
@@ -77,9 +80,25 @@ public class Menu extends JFrame implements ActionListener, MouseListener {
         battleButton.setBackground(Color.BLACK);
         battleButton.setBorder(BorderFactory.createEtchedBorder());
         battleButton.addActionListener(this);
-        frame.setVisible(true);
 
         statsPanel.add(battleButton);
+
+        landBattleBox = new JCheckBox();
+        seaBattleBox = new JCheckBox();
+        ampBattleBox = new JCheckBox();
+        landBattleBox.addMouseListener(this);
+        seaBattleBox.addMouseListener(this);
+        ampBattleBox.addMouseListener(this);
+        landBattleBox.setText("Land Battle");
+        seaBattleBox.setText("Sea Battle");
+        ampBattleBox.setText("Amphibious Battle");
+        landBattleBox.setSelected(true);
+
+        statsPanel.add(landBattleBox);
+        statsPanel.add(seaBattleBox);
+        statsPanel.add(ampBattleBox);
+
+        frame.setVisible(true);
     }
 
     @Override
@@ -98,7 +117,19 @@ public class Menu extends JFrame implements ActionListener, MouseListener {
 
     @Override
     public void mouseClicked(MouseEvent e) {
-
+        if (e.getSource().equals(landBattleBox)) {
+            seaBattleBox.setSelected(false);
+            ampBattleBox.setSelected(false);
+            landBattleBox.setSelected(true);
+        } else if (e.getSource().equals(seaBattleBox)){
+            landBattleBox.setSelected(false);
+            ampBattleBox.setSelected(false);
+            seaBattleBox.setSelected(true);
+        } else if (e.getSource().equals(ampBattleBox)){
+            landBattleBox.setSelected(false);
+            seaBattleBox.setSelected(false);
+            ampBattleBox.setSelected(true);
+        }
     }
 
     @Override
@@ -122,6 +153,6 @@ public class Menu extends JFrame implements ActionListener, MouseListener {
     }
 
     public static void addUnit(){
-
+        System.out.println("Unit was added.");
     }
 }

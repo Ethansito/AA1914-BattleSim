@@ -1,5 +1,7 @@
 package org.ethansito.Frames;
 
+import org.ethansito.Main;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -40,6 +42,7 @@ public class AddUnitMenu extends JFrame implements ActionListener, MouseListener
         army2Box.addMouseListener(this);
         army1Box.setText("Red Army");
         army2Box.setText("Blue Army");
+        army1Box.setSelected(true);
         topPanel.add(army1Box);
         topPanel.add(army2Box);
         topPanel.setSize(0, 75);
@@ -117,19 +120,24 @@ public class AddUnitMenu extends JFrame implements ActionListener, MouseListener
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        if (labels.contains((JLabel) e.getSource()))
-        {
-            if (verify()){
-                Menu.addUnit();
+        if (e.getSource() instanceof JLabel){
+            if (labels.contains((JLabel) e.getSource()))
+            {
+                if (verify((JLabel) e.getSource())){
+                    Menu.addUnit();
+                }
             }
-        } else if (e.getSource().equals(army1Box)) {
+        }
+        else if (e.getSource().equals(army1Box)) {
             army2Box.setSelected(false);
+            army1Box.setSelected(true);
+
         } else if (e.getSource().equals(army2Box)){
             army1Box.setSelected(false);
+            army2Box.setSelected(true);
         } else{
-            System.out.println("abd it was something else");
+            System.out.println("and it was something else");
         }
-
     }
 
     @Override
@@ -158,8 +166,13 @@ public class AddUnitMenu extends JFrame implements ActionListener, MouseListener
         label.setVerticalTextPosition(SwingConstants.BOTTOM);
     }
 
-    public boolean verify(){
+    public boolean verify(JLabel label){
         // This will check if the unit can be added to this battle
+        if (label.equals(infantryLabel) || label.equals(artilleryLabel) || label.equals(tankLabel) || label.equals(fighterLabel)){
+            return !(Main.menu.seaBattleBox.isSelected());
+        } else if (label.equals(transportLabel) || label.equals(submarineLabel) || label.equals(cruiserLabel) || label.equals(battleshipLabel)){
+            return !(Main.menu.landBattleBox.isSelected());
+        }
         return false;
     }
 
