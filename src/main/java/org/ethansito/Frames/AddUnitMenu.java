@@ -26,6 +26,7 @@ public class AddUnitMenu extends JFrame implements ActionListener, MouseListener
 
     AddUnitMenu(){
         JFrame addUnitFrame = new JFrame();
+        addUnitFrame.setLocation(160, 0);
         addUnitFrame.setLayout(new BorderLayout());
         addUnitFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         addUnitFrame.setSize(new Dimension(250, 750));
@@ -124,7 +125,7 @@ public class AddUnitMenu extends JFrame implements ActionListener, MouseListener
             if (labels.contains((JLabel) e.getSource()))
             {
                 if (verify((JLabel) e.getSource())){
-                    Menu.addUnit();
+                    Menu.addUnit((JLabel) e.getSource());
                 }
             }
         }

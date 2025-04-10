@@ -7,7 +7,7 @@ public class Tank extends Unit {
     static int attack = 2;
     static int defense = 1;
 
-    Tank(){
+    public Tank(){
         super(COST, attack, defense);
     }
 }

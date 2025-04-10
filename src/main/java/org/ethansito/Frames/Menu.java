@@ -6,6 +6,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.ArrayList;
 
 public class Menu extends JFrame implements ActionListener, MouseListener {
 
@@ -14,23 +15,34 @@ public class Menu extends JFrame implements ActionListener, MouseListener {
     JCheckBox landBattleBox;
     JCheckBox seaBattleBox;
     JCheckBox ampBattleBox;
+    static JPanel army1Panel;
+    static JPanel army2Panel;
+    static AddUnitMenu addUnitMenu;
+    static JFrame menuFrame;
+
+    static int[] army1Units = {0, 0};
+    static int[] army2Units = {0, 0};
 
     public Menu()
     {
         // Learning how to make a GUI
-        JFrame frame = new JFrame();
-        frame.setLayout(new BorderLayout());
-        frame.setTitle("A&A 1914 Battle Simulator");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.getContentPane().setBackground(Color.BLACK);
+        menuFrame = new JFrame();
+        menuFrame.setLocation(400, 0);
+        menuFrame.setLayout(new BorderLayout());
+        menuFrame.setTitle("A&A 1914 Battle Simulator");
+        menuFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        menuFrame.getContentPane().setBackground(Color.BLACK);
         ImageIcon image = new ImageIcon("src/main/java/org/ethansito/logo.jpg");
-        frame.setIconImage(image.getImage());
-        frame.setSize(750, 750);
+        menuFrame.setIconImage(image.getImage());
+        menuFrame.setSize(750, 750);
 
-        JPanel army1Panel = new JPanel();
+        army1Panel = new JPanel(new GridLayout(4, 4));
         army1Panel.setBackground(Color.RED);
         army1Panel.setPreferredSize(new Dimension(500, 700));
 
+        army2Panel = new JPanel(new GridLayout(4, 4));
+        army2Panel.setBackground(Color.BLUE);
+        army2Panel.setPreferredSize(new Dimension(500, 700));
 
         JPanel centerPanel = new JPanel();
         centerPanel.setLayout(new GridLayout(1, 2));
@@ -41,15 +53,11 @@ public class Menu extends JFrame implements ActionListener, MouseListener {
         titlePanel.setBackground(Color.GREEN);
         titlePanel.setPreferredSize(new Dimension(100, 200));
 
-        JPanel army2Panel = new JPanel();
-        army2Panel.setBackground(Color.BLUE);
-        army2Panel.setPreferredSize(new Dimension(500, 700));
-
         JPanel statsPanel = new JPanel();
         statsPanel.setBackground(Color.WHITE);
         statsPanel.setPreferredSize(new Dimension(400, 100));
 
-        frame.add(centerPanel, BorderLayout.CENTER);centerPanel.add(army1Panel);centerPanel.add(army2Panel);frame.add(titlePanel, BorderLayout.NORTH);frame.add(statsPanel, BorderLayout.SOUTH);
+        menuFrame.add(centerPanel, BorderLayout.CENTER);centerPanel.add(army1Panel);centerPanel.add(army2Panel);menuFrame.add(titlePanel, BorderLayout.NORTH);menuFrame.add(statsPanel, BorderLayout.SOUTH);
 
         JLabel label = new JLabel("Axis & Allies 1914 Battle Simulator");
 
@@ -98,14 +106,14 @@ public class Menu extends JFrame implements ActionListener, MouseListener {
         statsPanel.add(seaBattleBox);
         statsPanel.add(ampBattleBox);
 
-        frame.setVisible(true);
+        menuFrame.setVisible(true);
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == addUnitButton)
         {
-            new AddUnitMenu();
+            addUnitMenu = new AddUnitMenu();
         }
 
         if (e.getSource() == battleButton)
@@ -152,7 +160,18 @@ public class Menu extends JFrame implements ActionListener, MouseListener {
 
     }
 
-    public static void addUnit(){
+    public static void addUnit(JLabel label){
+        Icon icon = label.getIcon();
+        JLabel second = new JLabel();
+        second.setIcon(icon);
+        if (addUnitMenu.army1Box.isSelected()) {
+            army1Panel.add(second);
+            System.out.println("Adding to army1Panel");
+        } else{
+            army2Panel.add(second);
+        }
+        menuFrame.revalidate();
+        menuFrame.repaint();
         System.out.println("Unit was added.");
     }
 }
