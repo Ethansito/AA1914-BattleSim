@@ -1,5 +1,7 @@
 package org.ethansito.Frames;
 
+import org.ethansito.Main;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -101,6 +103,12 @@ public class Menu extends JFrame implements ActionListener, MouseListener {
         seaBattleBox.setText("Sea Battle");
         ampBattleBox.setText("Amphibious Battle");
         landBattleBox.setSelected(true);
+        // These buttons are disabled until sea battles and amphibious battles are implemented
+        seaBattleBox.setEnabled(false);
+        ampBattleBox.setEnabled(false);
+        landBattleBox.setFocusable(false);
+        seaBattleBox.setFocusable(false);
+        ampBattleBox.setFocusable(false);
 
         statsPanel.add(landBattleBox);
         statsPanel.add(seaBattleBox);
@@ -118,7 +126,7 @@ public class Menu extends JFrame implements ActionListener, MouseListener {
 
         if (e.getSource() == battleButton)
         {
-            System.out.println("Pee");
+            Main.army1.landBattle(Main.army2);
         }
 
     }
@@ -130,10 +138,12 @@ public class Menu extends JFrame implements ActionListener, MouseListener {
             ampBattleBox.setSelected(false);
             landBattleBox.setSelected(true);
         } else if (e.getSource().equals(seaBattleBox)){
+            if (!seaBattleBox.isEnabled()){return;}
             landBattleBox.setSelected(false);
             ampBattleBox.setSelected(false);
             seaBattleBox.setSelected(true);
         } else if (e.getSource().equals(ampBattleBox)){
+            if (!ampBattleBox.isEnabled()){return;}
             landBattleBox.setSelected(false);
             seaBattleBox.setSelected(false);
             ampBattleBox.setSelected(true);
@@ -166,12 +176,44 @@ public class Menu extends JFrame implements ActionListener, MouseListener {
         second.setIcon(icon);
         if (addUnitMenu.army1Box.isSelected()) {
             army1Panel.add(second);
-            System.out.println("Adding to army1Panel");
+            if (label.equals(AddUnitMenu.infantryLabel)){
+                Main.army1.setInfantry(Main.army1.getInfantry() + 1);
+            } else if (label.equals(AddUnitMenu.artilleryLabel)){
+                Main.army1.setArtillery(Main.army1.getArtillery() + 1);
+            } else if (label.equals(AddUnitMenu.tankLabel)){
+                Main.army1.setTanks(Main.army1.getTanks() + 1);
+            } else if (label.equals(AddUnitMenu.fighterLabel)){
+                Main.army1.setFighters(Main.army1.getFighters() + 1);
+            } else if (label.equals(AddUnitMenu.transportLabel)){
+                Main.army1.setTransports(Main.army1.getTransports() + 1);
+            } else if (label.equals(AddUnitMenu.submarineLabel)){
+                Main.army1.setSubmarines(Main.army1.getSubmarines() + 1);
+            } else if (label.equals(AddUnitMenu.cruiserLabel)){
+                Main.army1.setCruisers(Main.army1.getCruisers() + 1);
+            } else if (label.equals(AddUnitMenu.battleshipLabel)){
+                Main.army1.setBattleships(Main.army1.getBattleships() + 1);
+            }
         } else{
             army2Panel.add(second);
+            if (label.equals(AddUnitMenu.infantryLabel)){
+                Main.army2.setInfantry(Main.army2.getInfantry() + 1);
+            } else if (label.equals(AddUnitMenu.artilleryLabel)){
+                Main.army2.setArtillery(Main.army2.getArtillery() + 1);
+            } else if (label.equals(AddUnitMenu.tankLabel)){
+                Main.army2.setTanks(Main.army2.getTanks() + 1);
+            } else if (label.equals(AddUnitMenu.fighterLabel)){
+                Main.army2.setFighters(Main.army2.getFighters() + 1);
+            } else if (label.equals(AddUnitMenu.transportLabel)){
+                Main.army2.setTransports(Main.army2.getTransports() + 1);
+            } else if (label.equals(AddUnitMenu.submarineLabel)){
+                Main.army2.setSubmarines(Main.army2.getSubmarines() + 1);
+            } else if (label.equals(AddUnitMenu.cruiserLabel)){
+                Main.army2.setCruisers(Main.army2.getCruisers() + 1);
+            } else if (label.equals(AddUnitMenu.battleshipLabel)){
+                Main.army2.setBattleships(Main.army2.getBattleships() + 1);
+            }
         }
         menuFrame.revalidate();
         menuFrame.repaint();
-        System.out.println("Unit was added.");
     }
 }

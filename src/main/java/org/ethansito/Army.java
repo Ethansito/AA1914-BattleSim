@@ -1,5 +1,6 @@
 package org.ethansito;
 
+import org.ethansito.Frames.Stats;
 import org.ethansito.Units.Land.Artillery;
 import org.ethansito.Units.Land.Fighter;
 import org.ethansito.Units.Land.Infantry;
@@ -117,6 +118,8 @@ public class Army {
     }
 
     public void landBattle(Army army2){
+        int[] beforeData = {infantry, artillery, tanks, fighters, transports, submarines, cruisers, battleships,
+        army2.infantry, army2.artillery, army2.tanks, army2.fighters, army2.transports, army2.submarines, army2.cruisers, army2.battleships};
         // Determine Air Superiority
         if (fighters > 0 && army2.getFighters() > 0){
             airSup = airSuperiority(army2);
@@ -128,6 +131,10 @@ public class Army {
         buffTroops();
         army2.buffTroops();
 
+        // Expected Hits
+        int army1ExHits = (int) expectedHits();
+        int army2ExHits = (int) army2.expectedHits();
+
         // Roll the Dice
         int army1Hits = landFire();
         int army2Hits = army2.landFire();
@@ -136,7 +143,7 @@ public class Army {
         int army1Casualties = Math.max(0, army2Hits - tanks - buffedTank);
 
         // Stats
-
+        new Stats(beforeData, army1Hits, army2Hits, army1Casualties, army1ExHits, army2ExHits);
     }
 
     public boolean airSuperiority(Army army2){
@@ -254,4 +261,24 @@ public class Army {
         return hits;
     }
 
+    public float expectedHits(){
+        float hits = 0;
+        if (attacker){
+            hits += infantry * 0.33f;
+            hits += buffedInfantry * 0.5f;
+            hits += artillery * 0.5f;
+            hits += buffedArtillery * 0.67f;
+            hits += tanks * 0.33f;
+            hits += buffedTank * 0.5f;
+        } else{
+            hits += infantry * 0.5f;
+            hits += buffedInfantry * 0.5f;
+            hits += artillery * 0.5f;
+            hits += buffedArtillery * 0.67f;
+            hits += tanks * 0.17f;
+            hits += buffedTank * 0.17f;
+        }
+        hits += fighters * 0.33f;
+        return hits;
+    }
 }

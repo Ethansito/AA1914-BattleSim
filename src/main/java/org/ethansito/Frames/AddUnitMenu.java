@@ -12,14 +12,14 @@ import java.util.ArrayList;
 
 public class AddUnitMenu extends JFrame implements ActionListener, MouseListener {
 
-    JLabel infantryLabel;
-    JLabel artilleryLabel;
-    JLabel transportLabel;
-    JLabel submarineLabel;
-    JLabel tankLabel;
-    JLabel cruiserLabel;
-    JLabel fighterLabel;
-    JLabel battleshipLabel;
+    public static JLabel infantryLabel;
+    public static JLabel artilleryLabel;
+    public static JLabel transportLabel;
+    public static JLabel submarineLabel;
+    public static JLabel tankLabel;
+    public static JLabel cruiserLabel;
+    public static JLabel fighterLabel;
+    public static JLabel battleshipLabel;
     JCheckBox army1Box;
     JCheckBox army2Box;
     ArrayList<JLabel> labels = new ArrayList<>();
