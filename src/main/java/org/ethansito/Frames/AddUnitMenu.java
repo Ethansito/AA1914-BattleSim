@@ -4,10 +4,7 @@ import org.ethansito.Main;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
+import java.awt.event.*;
 import java.util.ArrayList;
 
 public class AddUnitMenu extends JFrame implements ActionListener, MouseListener {
@@ -33,6 +30,13 @@ public class AddUnitMenu extends JFrame implements ActionListener, MouseListener
         addUnitFrame.setTitle("Add Units");
         ImageIcon image = new ImageIcon("src/main/java/org/ethansito/logo.jpg");
         addUnitFrame.setIconImage(image.getImage());
+        addUnitFrame.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                super.windowClosing(e);
+                Menu.addUnitOut = false;
+            }
+        });
 
         JPanel topPanel = new JPanel();
         army1Box = new JCheckBox();
@@ -58,7 +62,6 @@ public class AddUnitMenu extends JFrame implements ActionListener, MouseListener
         infantryLabel.addMouseListener(this);
         alignLabel(infantryLabel, "Infantry");
         unitPanel.add(infantryLabel);
-        System.out.println(infantryIcon.getIconHeight() + " " + infantryIcon.getIconWidth());
 
         ImageIcon transportIcon = new ImageIcon("src/main/java/org/ethansito/Units/Transport.png");
         transportIcon = new ImageIcon(transportIcon.getImage().getScaledInstance(100, -100, 0));
@@ -136,8 +139,6 @@ public class AddUnitMenu extends JFrame implements ActionListener, MouseListener
         } else if (e.getSource().equals(army2Box)){
             army1Box.setSelected(false);
             army2Box.setSelected(true);
-        } else{
-            System.out.println("and it was something else");
         }
     }
 

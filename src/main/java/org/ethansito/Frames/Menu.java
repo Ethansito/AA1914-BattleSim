@@ -9,9 +9,11 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Menu extends JFrame implements ActionListener, MouseListener {
 
+    JButton clearButton = new JButton();
     JButton addUnitButton = new JButton();
     JButton battleButton = new JButton();
     JCheckBox landBattleBox;
@@ -21,9 +23,8 @@ public class Menu extends JFrame implements ActionListener, MouseListener {
     static JPanel army2Panel;
     static AddUnitMenu addUnitMenu;
     static JFrame menuFrame;
-
-    static int[] army1Units = {0, 0};
-    static int[] army2Units = {0, 0};
+    public static boolean addUnitOut = false;
+    public static HashMap<JLabel, String> labelsActive = new HashMap<>();
 
     public Menu()
     {
@@ -74,6 +75,12 @@ public class Menu extends JFrame implements ActionListener, MouseListener {
 
         titlePanel.add(label);
 
+        clearButton.setPreferredSize(new Dimension(150, 150));
+        clearButton.addActionListener(this);
+        clearButton.setText("Clear");
+        clearButton.setBorder(BorderFactory.createEtchedBorder());
+        clearButton.setFocusable(false);
+        statsPanel.add(clearButton);
 
         addUnitButton.setPreferredSize(new Dimension(150, 150));
         addUnitButton.addActionListener(this);
@@ -81,6 +88,7 @@ public class Menu extends JFrame implements ActionListener, MouseListener {
         addUnitButton.setForeground(Color.BLUE);
         addUnitButton.setBackground(Color.ORANGE);
         addUnitButton.setBorder(BorderFactory.createEtchedBorder());
+        addUnitButton.setFocusable(false);
 
         statsPanel.add(addUnitButton);
 
@@ -90,6 +98,7 @@ public class Menu extends JFrame implements ActionListener, MouseListener {
         battleButton.setBackground(Color.BLACK);
         battleButton.setBorder(BorderFactory.createEtchedBorder());
         battleButton.addActionListener(this);
+        battleButton.setFocusable(false);
 
         statsPanel.add(battleButton);
 
@@ -121,12 +130,23 @@ public class Menu extends JFrame implements ActionListener, MouseListener {
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == addUnitButton)
         {
+            if (addUnitOut){return;}
             addUnitMenu = new AddUnitMenu();
+            addUnitOut = true;
         }
 
         if (e.getSource() == battleButton)
         {
             Main.army1.landBattle(Main.army2);
+        }
+
+        if (e.getSource() == clearButton){
+            army1Panel.removeAll();
+            army2Panel.removeAll();
+            Main.army1.clear();
+            Main.army2.clear();
+            menuFrame.revalidate();
+            menuFrame.repaint();
         }
 
     }
@@ -147,6 +167,54 @@ public class Menu extends JFrame implements ActionListener, MouseListener {
             landBattleBox.setSelected(false);
             seaBattleBox.setSelected(false);
             ampBattleBox.setSelected(true);
+        } else if (e.getComponent() instanceof JLabel){
+            System.out.println("Almost nothing");
+            if (labelsActive.containsKey((JLabel) e.getSource())){
+                JPanel parent = (JPanel) e.getComponent().getParent();
+                String unit = labelsActive.get((JLabel) e.getComponent());
+                System.out.println("We got something");
+                if (parent.equals(army1Panel)){
+                    if (unit.equalsIgnoreCase("infantry")){
+                        Main.army1.setInfantry(Main.army1.getInfantry() - 1);
+                    } else if (unit.equalsIgnoreCase("artillery")){
+                        Main.army1.setArtillery(Main.army1.getArtillery() - 1);
+                    } else if (unit.equalsIgnoreCase("tank")){
+                        Main.army1.setTanks(Main.army1.getTanks() - 1);
+                    } else if (unit.equalsIgnoreCase("fighter")){
+                        Main.army1.setFighters(Main.army1.getFighters() - 1);
+                    } else if (unit.equalsIgnoreCase("transport")){
+                        Main.army1.setTransports(Main.army1.getTransports() - 1);
+                    } else if (unit.equalsIgnoreCase("submarine")){
+                        Main.army1.setSubmarines(Main.army1.getSubmarines() - 1);
+                    } else if (unit.equalsIgnoreCase("cruiser")){
+                        Main.army1.setCruisers(Main.army1.getCruisers() - 1);
+                    } else if (unit.equalsIgnoreCase("battleship")){
+                        Main.army1.setBattleships(Main.army1.getBattleships() - 1);
+                    }
+                } else if (parent.equals(army2Panel)){
+                    if (unit.equalsIgnoreCase("infantry")){
+                        Main.army2.setInfantry(Main.army2.getInfantry() - 1);
+                    } else if (unit.equalsIgnoreCase("artillery")){
+                        Main.army2.setArtillery(Main.army2.getArtillery() - 1);
+                    } else if (unit.equalsIgnoreCase("tank")){
+                        Main.army2.setTanks(Main.army2.getTanks() - 1);
+                    } else if (unit.equalsIgnoreCase("fighter")){
+                        Main.army2.setFighters(Main.army2.getFighters() - 1);
+                    } else if (unit.equalsIgnoreCase("transport")){
+                        Main.army2.setTransports(Main.army2.getTransports() - 1);
+                    } else if (unit.equalsIgnoreCase("submarine")){
+                        Main.army2.setSubmarines(Main.army2.getSubmarines() - 1);
+                    } else if (unit.equalsIgnoreCase("cruiser")){
+                        Main.army2.setCruisers(Main.army2.getCruisers() - 1);
+                    } else if (unit.equalsIgnoreCase("battleship")){
+                        Main.army2.setBattleships(Main.army2.getBattleships() - 1);
+                    }
+                }
+                labelsActive.remove((JLabel) e.getComponent());
+                parent.remove(e.getComponent());
+                parent.revalidate();
+                parent.repaint();
+            }
         }
     }
 
@@ -174,42 +242,59 @@ public class Menu extends JFrame implements ActionListener, MouseListener {
         Icon icon = label.getIcon();
         JLabel second = new JLabel();
         second.setIcon(icon);
+        second.addMouseListener(Main.menu);
         if (addUnitMenu.army1Box.isSelected()) {
             army1Panel.add(second);
             if (label.equals(AddUnitMenu.infantryLabel)){
+                labelsActive.put(second, "infantry");
                 Main.army1.setInfantry(Main.army1.getInfantry() + 1);
             } else if (label.equals(AddUnitMenu.artilleryLabel)){
+                labelsActive.put(second, "artillery");
                 Main.army1.setArtillery(Main.army1.getArtillery() + 1);
             } else if (label.equals(AddUnitMenu.tankLabel)){
+                labelsActive.put(second, "tank");
                 Main.army1.setTanks(Main.army1.getTanks() + 1);
             } else if (label.equals(AddUnitMenu.fighterLabel)){
+                labelsActive.put(second, "fighter");
                 Main.army1.setFighters(Main.army1.getFighters() + 1);
             } else if (label.equals(AddUnitMenu.transportLabel)){
+                labelsActive.put(second, "transport");
                 Main.army1.setTransports(Main.army1.getTransports() + 1);
             } else if (label.equals(AddUnitMenu.submarineLabel)){
+                labelsActive.put(second, "submarine");
                 Main.army1.setSubmarines(Main.army1.getSubmarines() + 1);
             } else if (label.equals(AddUnitMenu.cruiserLabel)){
+                labelsActive.put(second, "cruiser");
                 Main.army1.setCruisers(Main.army1.getCruisers() + 1);
             } else if (label.equals(AddUnitMenu.battleshipLabel)){
+                labelsActive.put(second, "battleship");
                 Main.army1.setBattleships(Main.army1.getBattleships() + 1);
             }
         } else{
             army2Panel.add(second);
             if (label.equals(AddUnitMenu.infantryLabel)){
+                labelsActive.put(second, "infantry");
                 Main.army2.setInfantry(Main.army2.getInfantry() + 1);
             } else if (label.equals(AddUnitMenu.artilleryLabel)){
+                labelsActive.put(second, "artillery");
                 Main.army2.setArtillery(Main.army2.getArtillery() + 1);
             } else if (label.equals(AddUnitMenu.tankLabel)){
+                labelsActive.put(second, "tank");
                 Main.army2.setTanks(Main.army2.getTanks() + 1);
             } else if (label.equals(AddUnitMenu.fighterLabel)){
+                labelsActive.put(second, "fighter");
                 Main.army2.setFighters(Main.army2.getFighters() + 1);
             } else if (label.equals(AddUnitMenu.transportLabel)){
+                labelsActive.put(second, "transport");
                 Main.army2.setTransports(Main.army2.getTransports() + 1);
             } else if (label.equals(AddUnitMenu.submarineLabel)){
+                labelsActive.put(second, "submarine");
                 Main.army2.setSubmarines(Main.army2.getSubmarines() + 1);
             } else if (label.equals(AddUnitMenu.cruiserLabel)){
+                labelsActive.put(second, "cruiser");
                 Main.army2.setCruisers(Main.army2.getCruisers() + 1);
             } else if (label.equals(AddUnitMenu.battleshipLabel)){
+                labelsActive.put(second, "battleship");
                 Main.army2.setBattleships(Main.army2.getBattleships() + 1);
             }
         }

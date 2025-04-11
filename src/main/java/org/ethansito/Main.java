@@ -11,8 +11,5 @@ public class Main {
     public static Army army2 = new Army(false);
     public static void main(String[] args) {
 
-
-
-
     }
 }

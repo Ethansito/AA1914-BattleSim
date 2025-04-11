@@ -20,7 +20,7 @@ public class Army {
     int battleships = 0;
     boolean attacker;
     boolean airSup = false;
-
+    static int[] fightersLost = {0, 0};
     Army(boolean attacker){
         this.attacker = attacker;
     }
@@ -144,6 +144,10 @@ public class Army {
 
         // Stats
         new Stats(beforeData, army1Hits, army2Hits, army1Casualties, army1ExHits, army2ExHits);
+
+        // Debuff Troops and Return Fighter Casualties
+        debuff();
+        army2.debuff();
     }
 
     public boolean airSuperiority(Army army2){
@@ -161,6 +165,9 @@ public class Army {
                     army2hits++;
                 }
             }
+
+            fightersLost[0] = fightersLost[0] + Math.min(fighters, army2hits);
+            fightersLost[1] = fightersLost[1] + Math.min(army2.getFighters(), army1hits);
 
             if (army1hits >= army2.getFighters()){
                 army2.setFighters(0);
@@ -280,5 +287,35 @@ public class Army {
         }
         hits += fighters * 0.33f;
         return hits;
+    }
+
+    public void clear(){
+        setInfantry(0);
+        setBuffedInfantry(0);
+        setArtillery(0);
+        setBuffedArtillery(0);
+        setTanks(0);
+        setBuffedTank(0);
+        setFighters(0);
+        setTransports(0);
+        setSubmarines(0);
+        setCruisers(0);
+        setBattleships(0);
+    }
+
+    public void debuff(){
+        infantry += buffedInfantry;
+        buffedInfantry = 0;
+        artillery += buffedArtillery;
+        buffedArtillery = 0;
+        tanks += buffedTank;
+        buffedTank = 0;
+        if (this.equals(Main.army1)){
+            fighters += fightersLost[0];
+            fightersLost[0] = 0;
+        } else if (this.equals(Main.army2)) {
+            fighters += fightersLost[1];
+            fightersLost[1] = 0;
+        }
     }
 }

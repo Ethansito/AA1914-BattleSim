@@ -18,6 +18,9 @@ public class Stats extends JFrame {
         statsFrame.setLayout(new GridLayout(3, 1));
         statsFrame.setLocation(800,0);
         statsFrame.setSize(250, 600);
+        ImageIcon image = new ImageIcon("src/main/java/org/ethansito/logo.jpg");
+        statsFrame.setIconImage(image.getImage());
+
         String armyString = String.format("""
                         Army Composition
                 Red Army             Blue Army
